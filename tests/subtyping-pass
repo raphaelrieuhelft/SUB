@@ -1,0 +1,23 @@
+(* Examples of non-trivial subtyping.  They should all pass. *)
+
+(1 : float);;
+
+1 +. 3.14;;
+
+let f (x: float) = x in f 1;;
+
+let f (x: T) = x in f 3.14;;
+
+({x=1;y=3.14} : {y:float});;
+
+({x=1;y=3} : {y:float; x:int});;
+
+({r={x=1;y=3}; z=0} : {r:{y:float}; z:T});;
+
+let diag (r: {x:float; y:float}) = r.x +. r.y
+in diag {z=2; x=1; a={}; y=3.14};;
+
+let f (x: float) = int x in
+let g = (f : int -> float) in
+g 42;;
+

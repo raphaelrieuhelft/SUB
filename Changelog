@@ -1,0 +1,6 @@
+Version 1.1: (2015-12-21)
+	- Revised the parser; curried function applications were
+	  parsed incorrectly
+
+Version 1.0: (2015-12-17)
+	- Initial release

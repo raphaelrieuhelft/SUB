@@ -1,0 +1,51 @@
+(* Examples where the coercions can be optimized. *)
+
+(* Coercions that don't change representation *)
+
+({x = 1} : {x : int});;
+
+({x = 1} : {x : T});;
+
+let f (x: T) = 42 in (f: float -> T);;
+
+(* Build big record then coerce to smaller record *)
+
+({x = 1 + 2; y = 3.14 +. 2.718} : {y : float});;
+
+({x = 1 + 2; y = 3.14 +. 2.718} : {x : float});;
+
+(* Telescopes of record coercions *)
+
+let r = {x=1;y=2;z=3} in ((r : {x:int; y:float}) : {y:float});;
+
+let r = {x=1;y=2;z=3} in
+let f (r: {y:float}) = r.y in
+f (r : {x:int; y:int});;
+
+(* Coerce record then project field *)
+
+let f (r: {x:int;y:int}) = (r : {y:float}).y
+in f {x=1;y=2};;
+
+(* Build function closure then coerce to supertype *)
+
+let f = ((fun (x: float) -> int x) : int -> float) in f 42;;
+
+(* Telescopes of function coercions *)
+
+let h (f: {x:int; y:int} -> float) = f {x=1;y=2} in
+let f (r: {x:float; y:float}) = int (r.x +. r.y) in
+h ((f : {x:float;y:int} -> int) : {x:int;y:int} -> int);;
+
+(* Coerce function then apply *)
+
+let f (x: float) = int x in
+(f : int -> float) 42;;
+
+
+
+
+
+
+
+

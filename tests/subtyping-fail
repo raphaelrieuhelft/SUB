@@ -1,0 +1,16 @@
+(* Examples of wrong subtyping.  They should all fail. *)
+
+(1 : T) + 2;;
+
+((3.14 : T) : float);;
+
+({x=1} : {x:int; y:float});;
+
+({x=3.14} : {x:int});;
+
+({x=1} : {}).x;;
+
+((fun (x: int) -> float x) : float -> float);;
+
+((fun (x: int) -> float x) : int -> int);;
+

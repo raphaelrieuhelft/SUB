@@ -1,0 +1,29 @@
+(* Basic examples, without subtyping.  They should all pass. *)
+
+1;;
+
+3.14;;
+
+float 1;;
+
+int 2.718;;
+
+1 + 2;;
+
+3.5 +. 1.75;;
+
+fun (x: int) -> x + 1;;
+
+fun (x: float) (y: int) -> int x + y;;
+
+let f (x: int) = x + 1 in f 42;;
+
+let id (f: int -> int) = f in id (fun (x: int) -> x + 1) 42;;
+
+{x=1; y=3.14};;
+
+{x=1; y=3.14}.x;;
+
+{x=1; y=3.14}.y;;
+
+let diag (r: {x:int; y:int}) = r.x + r.y in diag {x=1;y=2};;
