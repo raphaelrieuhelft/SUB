@@ -19,7 +19,7 @@ $(MAIN).byte: byte
 
 
 $(MAIN): $(MAIN).target
-	cp _build/$(MAIN).$(TARGET) $(MAIN).$(TARGET)
+	cp _build/$(MAIN).$(TARGET) $(MAIN)
 
 $(MAIN).target:
 	$(OCAMLBUILD) $(MAIN).$(TARGET)
@@ -29,6 +29,6 @@ clean:
 	ocamlbuild -classic-display -clean
 
 realclean: clean
-	rm -f $(MAIN) *~
+	rm -f $(MAIN).$(TARGET) *~
 
 cleanall: realclean
