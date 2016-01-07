@@ -46,7 +46,7 @@ let rec infer env e =
   | Eapp (e1, e2) ->
 	  begin match infer env e1 with
 	  | Arrow(t1,t2) -> check env e2 t1; t2
-	  | t -> raise (Type_error ("attempting to apply to a non-function of type "^(pretty_typ t)))
+	  | t -> type_error ("attempting to apply to a non-function of type "^(pretty_typ t))
 	  end
   | Elet (v, e1, e2) ->
 	  let t1 = infer env e1 in infer (add_typenv v t1 env) e2
@@ -70,7 +70,7 @@ let rec infer env e =
 		begin match infer env (Erecord t) with 
 		| Record l ->
 			if List.mem_assoc lab l 
-			then raise (Type_error ("label "^lab^" appears twice in this record"))  
+			then type_error ("label "^lab^" appears twice in this record")
 			else Record ((lab, infer env e)::l) 
 		| _-> assert false
 		end
@@ -78,7 +78,7 @@ let rec infer env e =
   | Efield (e,lab) -> 
 	  begin match infer env e with 
 	  |Record l -> (try List.assoc lab l with Not_found -> raise (Type_error ("label "^lab^" not present in this record")))
-	  |t -> raise (Type_error ("attempting to type label "^lab^" of a non-record of type "^(pretty_typ t)))
+	  |t -> type_error ("attempting to type label "^lab^" of a non-record of type "^(pretty_typ t))
 	  end
   (* Type constraint *)
   | Econstraint(e, t) ->
