@@ -20,7 +20,7 @@ exception Not_subtype
 
 let rec find_index lab l = match l with
 	|[] -> raise Not_found
-	|(lab1, t)::_ when lab = lab1 -> (0,t)
+	|(lab1, t)::_ when lab = lab1 -> (1,t)
 	|_::l2 -> let (n,t) = find_index lab l2 in (n+1, t)
 	
 
@@ -57,7 +57,10 @@ let rec elab env e =
 		  |(Arrow(t1,t2), lf) -> let la = check env a t1 in Lapp(lf, la)
 		  |(t,_) -> type_error ("Attempting to apply to a non-function of type "^(pretty_typ t))
 		end
-	  | Elet (v, e1, e2) -> let (t1, le1) = elab env e1 in snd (elab (add_typenv v t1 env) e2)
+	  | Elet (v, e1, e2) -> 
+		let (t1, le1) = elab env e1 in 
+		let (t2, le2) = elab (add_typenv v t1 env) e2 in
+		Llet (v, le1, le2)
 	  | Econst c -> Lconst c
 	  | Eunop (u,e1) -> let (t1, _) = type_of_unop u in let la = check env e1 t1 in Lunop(u, la)
 	  | Ebinop (b, e1, e2) -> 

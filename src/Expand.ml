@@ -10,7 +10,7 @@ open IL
 
 let rec elt i = function
   | [] -> assert false (*this should never happen, too short tuples are detected at typing*)
-  | h::t when i = 0 -> h
+  | h::t when i = 1 -> h
   |_ ::t -> elt (i-1) t
 
 let append_tuple (l: lam) = function Ltuple l2 -> Ltuple (l::l2) |_-> assert false 
