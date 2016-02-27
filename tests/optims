@@ -41,11 +41,3 @@ h ((f : {x:float;y:int} -> int) : {x:int;y:int} -> int);;
 
 let f (x: float) = int x in
 (f : int -> float) 42;;
-
-
-
-
-
-
-
-
