@@ -15,9 +15,9 @@ let shift_and_add (env : debruijnenv) (v : variable) =
 
 let program (l: lam) : code = 
   let rec compile (l: lam) (env : debruijnenv) =
-    match l with 
+	match l with 
 	 | Lvar v -> [Iaccess (StringMap.find v env)]	(*never fails*)
-	 | Labstr (v, a) -> [Iclosure ((compile a (shift_and_add env v))@[Ireturn])]
+	 | Labstr (v, a) -> [Iclosure (tail_compile a (shift_and_add env v))] (*try to tail compile*)
 	 | Lapp (a, b) -> (compile a env)@(compile b env)@[Iapply]
 	 | Llet (v, a, b) -> (compile a env) @ (Ilet :: ((compile b (shift_and_add env v))@[Iendlet]))
 	 | Lconst c -> [Ipush c]
@@ -30,6 +30,13 @@ let program (l: lam) : code =
 	 | Ltuple ll -> (List.fold_right(fun a cl -> (compile a env)@cl) ll [])@[Imaketuple (List.length ll)]
 	 | Lfield (a, n) -> (compile a env)@[Ifield n]
 	 | Lcoerce _ -> assert false (*coercions are eliminated at expansion*)
-
+	
+  and tail_compile (l:lam) (env: debruijnenv) =
+	match l with
+	 | Llet(v,a,b) -> (compile a env) @ (Ilet :: (tail_compile b (shift_and_add env v))) 
+		(*no endlet*)
+	 | Lapp(a, b) -> (compile a env)@(compile b env)@[Itailapply] (*we can tail apply*)
+	 | a -> (compile l env)@[Ireturn] (*not a tail call*)
+	 
   in
   compile l StringMap.empty
