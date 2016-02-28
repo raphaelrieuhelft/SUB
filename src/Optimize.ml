@@ -17,7 +17,6 @@ let rec compose_coercions c1 c2 = match c1, c2 with
 	|_ -> assert false
 			
 
-
 let rec is_id_record l i = match l with
 	| [] -> true
 	| (i,Cid)::t -> is_id_record t (i+1)

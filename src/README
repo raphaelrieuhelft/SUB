@@ -1,0 +1,8 @@
+J'ai optimisé les inefficacités présentées dans le fichier de test fourni tests/optims, à savoir : 
+
+- Les coercions de record qui ne modifient pas le tuple sont remplacées par la coercion identité.
+- Quand un tuple devrait être immédiatement ramené à un tuple plus petit, on construit à la place un tuple qui contient uniquement les champs qu'on va utiliser.
+- Les coercions de record ou de fonction successives sont composées en une seule coercion
+- Quand on devrait appliquer une coercion de record à un tuple puis le projeter, à la place on le projette d'abord et et on applique une coercion au résultat.
+- Quand on devrait construire une clôture puis appliquer une coercion de fonction, à la place on modifie le corps de la fonction pour appliquer la coercion, ce qui permet de ne créer qu'une seule clôture dans le code compilé.
+- Quand on devrait appliquer une coercion de fonction, à la place on applique une coercion à l'argument, on applique la fonction non modifiée et on applique une coercion au résultat, afin de construire une clôture de fonction de moins.
